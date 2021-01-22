@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-
 import Task from './Task'
+
+
 
 const Tasks = () => {
 
+    // state 
     const [tasks, setTasks] = useState([ 
     
             {
@@ -33,21 +35,45 @@ const Tasks = () => {
         
         ]);
 
+    // Delete Task 
     const deleteTask = (id) =>{
         
-        setTasks(tasks.filter( (tas) => tas.id !== id));
+        setTasks(tasks.filter( (tas) => {
+
+            return tas.id !== id;
+        }));
     }
 
+    // Toggle reminder 
+    const toggleReminder = (id) => {
+        
+        setTasks(tasks.map( (task) =>{
+
+            return (
+                task.id === id ? { ...tasks, 
+                                    reminder: !tasks.reminder,
+                                    } : task
+            );
+        }));
+    }
     
 
     return (
+
         <div>
-            {tasks.map( (task, index) =>{
-                return (
-                    <Task key={ index } task={ task } onDelete={ () => deleteTask(task.id) }/>
-                );
-            })}
-        </div> 
+            { 
+                tasks.length > 0 ? <div>
+                    {tasks.map( (task, index) =>{
+                        
+                        return (
+                        
+                            <Task key={ index } task={ task } onDelete={ () => deleteTask(task.id) } onToggle={ toggleReminder }/>
+                            
+                        ); 
+                    })}
+                </div>  : <h4 style={{ color: 'red'}}>No task is available</h4>
+            }
+        </div>
     )
 }
 
